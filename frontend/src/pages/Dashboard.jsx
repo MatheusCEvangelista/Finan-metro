@@ -9,6 +9,16 @@ export default function Dashboard() {
   const [totals, setTotals] = useState({ income: 0, expense: 0 });
   const [filters, setFilters] = useState({ month: "all", type: "all" });
 
+  const fetchFinances = async () => {
+  try {
+    const data = await getFinances();
+    setFinances(data);
+    applyFilters(data, filters);
+  } catch (error) {
+    alert("Erro ao carregar finanças");
+  }
+};
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -39,6 +49,22 @@ export default function Dashboard() {
     applyFilters(newData, filters);
   };
 
+ const handleDelete = async (id) => {
+  try {
+    const token = localStorage.getItem("token");
+    await API.delete(`/finances/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchFinances();
+  } catch (error) {
+    alert("Erro ao deletar lançamento");
+  }
+};
+
+  const handleEdit = (finance) =>{
+    
+  }
+
   const applyFilters = (data, newFilters) => {
     let filteredData = [...data];
 
@@ -66,6 +92,7 @@ export default function Dashboard() {
 
   const dataPie = [];
   const categories = {};
+
   filtered.forEach((f) => {
     if (!categories[f.category]) categories[f.category] = 0;
     categories[f.category] += f.amount;
@@ -117,6 +144,8 @@ export default function Dashboard() {
           <li key={f._id}>
             [{f.type === "income" ? "Receita" : "Despesa"}] {f.category} - R${" "}
             {f.amount} ({new Date(f.date).toLocaleDateString()}) - {f.description}
+            <button onClick={() => handleEdit(f)}>Editar</button>
+            <button onClick={() => handleDelete(f._id)}>Deletar</button>
           </li>
         ))}
       </ul>
