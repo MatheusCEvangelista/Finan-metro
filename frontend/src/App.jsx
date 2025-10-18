@@ -8,13 +8,24 @@ function PrivateRoute({children}){
   return token ? children : <Navigate to = "/login"/>;
 }
 
+function PublicRoute({children}){
+  const token = localStorage.getItem("token");
+  return token ? <Navigate to = "/dashboard"/>:children;
+}
+
 function App(){
   return(
     <Router>
       <Routes>
-        <Route path = "/" element = {<Register/>}/>
-        <Route path = '/login' element = {<Login/>}/>
-        <Route path = '/register' element = {<Register/>}/>
+        <Route path = "/" element = {<PublicRoute>
+          <Register/>
+          </PublicRoute>}/>
+        <Route path = '/login' element = {<PublicRoute>
+          <Login/>
+        </PublicRoute>}/>
+        <Route path = '/register' element = {<PublicRoute>
+          <Register/>
+          </PublicRoute>}/>
         <Route path = '/dashboard' element = {<PrivateRoute>
           <Dashboard/>
         </PrivateRoute>}/>
