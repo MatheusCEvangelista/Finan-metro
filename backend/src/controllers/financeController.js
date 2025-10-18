@@ -32,3 +32,33 @@ export const getFinances = async (req, res) =>{
         res.status(500).json({message: error.message})
     }
 };
+
+export const  updateFinance = async (req, res) =>{
+    try{
+        const finance = await Finance.findById(req.params.id);
+        if (!finance) return res.status(404).json({message: "Lançamento nao encontrado"});
+
+        if (finance.user.toString() !== req.user.id)
+            return res.status(401).json({message: "Não autorizado"});
+
+        const updateFinance = await Finance.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        res.json(updateFinance)
+    }catch(error){
+        res.status(500).json({message: error.message})
+    }
+};
+
+export const deleteFinance = async (req, res) => {
+    try {
+        const finance = await Finance.findById(req.params.id);
+        if(!finance)
+            return res.status(400).json({message: "Não encontrado"});
+        if (finance.user.toString() !== req.user.id)
+            return res.status(401).json({message: "Não autorizado"});
+
+        await finance.deleteOne();
+        res.json({message: "Lançamento deletado"});
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
+};
