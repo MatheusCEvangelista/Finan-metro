@@ -130,10 +130,12 @@ export default function Dashboard() {
         </label>
       </div>
 
-      <div style={{ marginTop: "20px" }}>
-        <p>Receitas: R$ {totals.income}</p>
-        <p>Despesas: R$ {totals.expense}</p>
-        <p>Saldo: R$ {totals.income - totals.expense}</p>
+      <div style={{ marginTop: "20px", display: "flex", gap: "20px" }}>
+      <div style={{color: "green"}}> Receitas: R$ {totals.income}</div>
+      <div style={{color: "red"}}>Despesas: R$ {totals.expense}</div>
+      <div style = {{color : totals.income - totals.expense >= 0 ?"green": "red"}}>
+        Saldo: R$ {totals.income - totals.expense} 
+      </div>
       </div>
 
       <FinanceForm onAdd={handleAddFinance} />
@@ -141,7 +143,15 @@ export default function Dashboard() {
       <h3>Lista de Finanças</h3>
       <ul>
         {filtered.map((f) => (
-          <li key={f._id}>
+          <li key={f._id}
+          style={{
+            border: "1px solid #ccc",
+            padding: "10px",
+            margin: "5px 0",
+            borderRadius: "5px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center"}}>
             [{f.type === "income" ? "Receita" : "Despesa"}] {f.category} - R${" "}
             {f.amount} ({new Date(f.date).toLocaleDateString()}) - {f.description}
             <button onClick={() => handleEdit(f)}>Editar</button>
