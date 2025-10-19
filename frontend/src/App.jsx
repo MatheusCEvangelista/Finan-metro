@@ -18,7 +18,7 @@ function App(){
     <Router>
       <Routes>
         <Route path = "/" element = {<PublicRoute>
-          <Register/>
+          <Login/>
           </PublicRoute>}/>
         <Route path = '/login' element = {<PublicRoute>
           <Login/>
