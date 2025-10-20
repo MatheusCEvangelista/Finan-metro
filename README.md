@@ -63,7 +63,7 @@ npm run dev
 
 ### Hospedagem:
 https://vercel.com/matheuscevangelistas-projects/financometro
-Por enquanto apenas o frontend da aplicação esta hospedado!
+
 
 
 
